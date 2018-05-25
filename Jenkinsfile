@@ -1,13 +1,13 @@
 pipeline {
   agent {
     docker {
-      image '3.5.3-jdk-8-alpine'
       args '-v /root/.m2:/root/.m2'
+      image 'maven:3.3-jdk-8'
     }
 
   }
   stages {
-    stage('') {
+    stage('error') {
       steps {
         sh 'mvn jetty:run'
       }
