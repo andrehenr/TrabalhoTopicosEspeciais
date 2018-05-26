@@ -12,7 +12,7 @@ public class FabricaDeConexao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return DriverManager.getConnection("jdbc:mysql://localhost:3306/equipamento?useTimezone=true&serverTimezone=UTC&useSSL=false", "root", "1234");
+		return DriverManager.getConnection("jdbc:mysql://192.168.1.35:3306/equipamento?useTimezone=true&serverTimezone=UTC&useSSL=false", "root", "1234");
 	}
 
 }
