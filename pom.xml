@@ -64,7 +64,7 @@
 						<contextPath>/topicos</contextPath>
 					</webApp>
 					<stopKey>topicos</stopKey>
-					<stopPort>8181</stopPort>
+					<stopPort>8282</stopPort>
 					<stopWait>10</stopWait>
 				</configuration>
 			</plugin>
