@@ -11,12 +11,12 @@
 		<!-- Adapt this to a version found on http://central.maven.org/maven2/org/eclipse/jetty/jetty-maven-plugin/ -->
 		<jettyVersion>9.3.7.v20160115</jettyVersion>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
-        <flyway.version>5.0.7</flyway.version>
-        <mysql.driver.version>8.0.11</mysql.driver.version>
-        <database.driver>com.mysql.cj.jdbc.Driver</database.driver>
-        <database.url>jdbc:mysql://192.168.1.35:3306/equipamento?serverTimezone=UTC</database.url>
-        <database.username>andre</database.username>
-        <database.password>1234</database.password>
+		<flyway.version>5.0.7</flyway.version>
+		<mysql.driver.version>8.0.11</mysql.driver.version>
+		<database.driver>com.mysql.cj.jdbc.Driver</database.driver>
+		<database.url>jdbc:mysql://192.168.1.35:3306/equipamento?serverTimezone=UTC</database.url>
+		<database.username>andre</database.username>
+		<database.password>1234</database.password>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -31,22 +31,20 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
 		</dependency>
+		<!-- Plugin utilizado para testes <dependency> <groupId>org.eclipse.jetty</groupId> 
+			<artifactId>jetty-server</artifactId> <version>${jettyVersion}</version> 
+			</dependency> -->
 		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-server</artifactId>
-			<version>${jettyVersion}</version>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>${flyway.version}</version>
 		</dependency>
 		<dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-            <version>${flyway.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.driver.version}</version>
-        </dependency>
-        <dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.driver.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
 			<version>3.12.0</version>
@@ -54,20 +52,11 @@
 	</dependencies>
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>${jettyVersion}</version>
-				<configuration>
-					<scanIntervalSeconds>10</scanIntervalSeconds>
-					<webApp>
-						<contextPath>/topicos</contextPath>
-					</webApp>
-					<stopKey>topicos</stopKey>
-					<stopPort>8282</stopPort>
-					<stopWait>10</stopWait>
-				</configuration>
-			</plugin>
+			<!-- Plugin utilizado para testes <plugin> <groupId>org.eclipse.jetty</groupId> 
+				<artifactId>jetty-maven-plugin</artifactId> <version>${jettyVersion}</version> 
+				<configuration> <scanIntervalSeconds>10</scanIntervalSeconds> <webApp> <contextPath>/topicos</contextPath> 
+				</webApp> <stopKey>topicos</stopKey> <stopPort>8282</stopPort> <stopWait>10</stopWait> 
+				</configuration> </plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -78,33 +67,33 @@
 				</configuration>
 			</plugin>
 			<plugin>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-                <version>${flyway.version}</version>
-                <configuration>
-                    <driver>${database.driver}</driver>
-                    <url>${database.url}</url>
-                    <user>${database.username}</user>
-                    <password>${database.password}</password>
-                    <schemas>
-                        <schema>equipamento</schema>
-                    </schemas>
-                    <encoding>ISO-8859-1</encoding>
-                    <cleanOnValidationError>true</cleanOnValidationError>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>flyway database migration</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>clean</goal>
-                            <goal>baseline</goal>
-                            <goal>migrate</goal>
-                            <goal>info</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>${flyway.version}</version>
+				<configuration>
+					<driver>${database.driver}</driver>
+					<url>${database.url}</url>
+					<user>${database.username}</user>
+					<password>${database.password}</password>
+					<schemas>
+						<schema>equipamento</schema>
+					</schemas>
+					<encoding>ISO-8859-1</encoding>
+					<cleanOnValidationError>true</cleanOnValidationError>
+				</configuration>
+				<executions>
+					<execution>
+						<id>flyway database migration</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>clean</goal>
+							<goal>baseline</goal>
+							<goal>migrate</goal>
+							<goal>info</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<finalName>topicos</finalName>
 	</build>
