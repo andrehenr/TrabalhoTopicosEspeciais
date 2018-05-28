@@ -45,7 +45,7 @@ public class SeleniumTest {
 		driver = new ChromeDriver(service);
 		
 		//Acesso a home do site
-		driver.navigate().to("http://localhost:8181/topicos/");
+		driver.navigate().to("http://localhost:8282/topicos_teste/");
 		
 		//Acessando página de cadatro
 		driver.findElement(By.xpath("//*[@href='CadastraEquipamento.html']")).click();
