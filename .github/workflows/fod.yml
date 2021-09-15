@@ -1,0 +1,60 @@
+name: FoD SAST Scan and Import
+#link de download da ferramenta FodUpload.jar:
+#https://drive.google.com/drive/folders/1b5wkHwChO3PSjrRwQ1cvwj3I3UVXb_88?usp=sharing
+
+on: workflow_dispatch
+
+jobs:
+  FoD-SAST-Scan:
+    #Mudar para windows em caso de necessidade do msbuild 
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out source code
+      - name: Check Out Source Code
+        uses: actions/checkout@v2
+        
+      # Instala o java 8, necessário para executar a ferramenta de upload de código.
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      
+      # Prepare source+dependencies for upload.
+      - name: Download Fortify ScanCentral Client
+        uses: fortify/gha-setup-scancentral-client@v1
+      - name: Package Code + Dependencies
+        run: scancentral package $PACKAGE_OPTS -o package.zip
+        env:
+          PACKAGE_OPTS: "-bt none"
+      
+      # Inicia o upload do código empacotado para o Fortify On Demand
+      - name: Download Fortify on Demand Universal CI Tool
+        uses: fortify/gha-setup-fod-uploader@v1
+      - name: Perform SAST Scan
+        run: java -jar $FOD_UPLOAD_JAR -z package.zip -aurl $FOD_API_URL -purl $FOD_URL -rid "$FOD_RELEASE_ID" -tc "$FOD_TENANT" -ac "$FOD_KEY" "$FOD_SECRET" $FOD_UPLOADER_OPTS -n "$FOD_UPLOADER_NOTES"
+        env:
+          FOD_UPLOAD_JAR: fod/FodUpload.jar
+          FOD_TENANT: ${{ secrets.FOD_TENANT }}  
+          FOD_KEY: "f3087e07-3a09-4b2b-8e0a-889c06f4def8"
+          FOD_SECRET: "RW9lM0JVRE1kb1F1SVVSeWQ5VTAnWk0iQjVBKGs10"
+          FOD_RELEASE_ID: ${{ secrets.FOD_RELEASE_ID }}
+          FOD_URL: "https://ams.fortify.com/"
+          FOD_API_URL: "https://api.ams.fortify.com/"
+          FOD_UPLOADER_OPTS: "-ep 1 -pp 0 -I 1 -apf"
+          FOD_UPLOADER_NOTES: 'Triggered by GitHub Actions (${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})'
+      
+      # Quando o scan concluir será gerado um arquivo SARIF output que traz as informações da análise para dentro do GitHub.
+      - name: Download Results
+        uses: fortify/gha-export-vulnerabilities@v1
+        with:
+          fod_base_url: https://ams.fortify.com
+          fod_client_id: "cacb10a2-21b4-49bf-a8ea-f4f2d7aa72b2"
+          fod_client_secret: "VVktNS5Sbm41V0Q3NlVrS2d5S2R6ZSp5VXhYMnlN0"
+          fod_release_id: ${{ secrets.FOD_RELEASE_ID }}
+      
+      # Import Fortify on Demand results to GitHub Security Code Scanning
+      - name: Import Results
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: ./gh-fortify-sast.sarif
