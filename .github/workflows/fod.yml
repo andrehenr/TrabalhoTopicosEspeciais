@@ -29,7 +29,7 @@ jobs:
           PACKAGE_OPTS: "-bt none"
       
       # Inicia o upload do código empacotado para o Fortify On Demand
-      name: Upload package and start scan
+      - name: Upload package and start scan
         uses: docker://fortifydocker/fortify-ci-tools:latest
         with:
           entrypoint: java
