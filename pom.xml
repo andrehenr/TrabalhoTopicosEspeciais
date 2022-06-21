@@ -12,7 +12,7 @@
 		<jettyVersion>9.3.7.v20160115</jettyVersion>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 		<flyway.version>5.0.7</flyway.version>
-		<mysql.driver.version>8.0.11</mysql.driver.version>
+		<mysql.driver.version>8.0.28</mysql.driver.version>
 		<database.driver>com.mysql.cj.jdbc.Driver</database.driver>
 		<database.url>jdbc:mysql://192.168.1.35:3306/equipamento?serverTimezone=UTC</database.url>
 		<database.username>andre</database.username>
